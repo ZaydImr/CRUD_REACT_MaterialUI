@@ -11,17 +11,28 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    position:'fixed',
+    width:'100%',
+    left:0,
+    top:-38,
   },
   menuButton: {
     marginRight: theme.spacing(2),
+    color:'rgb(57, 19, 107)',
+    fontWeight:'800'
   },
   title: {
     flexGrow: 1,
   },
+  appBar:{
+        backgroundColor:'white',
+        color:'#222'
+  }
 }));
 
 export default function MenuAppBar() {
@@ -44,20 +55,20 @@ export default function MenuAppBar() {
 
   return (
     <div className={classes.root}>
-      <FormGroup>
+      <FormGroup >
         <FormControlLabel
           control={<Switch checked={auth} onChange={handleChange} aria-label="login switch" />}
           label={auth ? 'Logout' : 'Login'}
         />
       </FormGroup>
-      <AppBar position="static">
+      <AppBar position="static" className={classes.appBar}>
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
+            CRUD
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            Photos
-          </Typography>
+            <Typography variant="a" className={classes.title}>
+                  <Link to='/'>Home</Link>
+            </Typography>
           {auth && (
             <div>
               <IconButton
@@ -67,7 +78,7 @@ export default function MenuAppBar() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <AccountCircle />
+                <AccountCircle color="action" />
               </IconButton>
               <Menu
                 id="menu-appbar"

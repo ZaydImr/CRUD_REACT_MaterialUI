@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import FormGroup from '@material-ui/core/FormGroup'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import axios from 'axios'
@@ -26,9 +25,6 @@ const useStyles = makeStyles((theme) => ({
             padding: theme.spacing(2, 4, 3),
             borderRadius:5,
       },
-      frmGroup:{
-
-      },
       frmControl:{
             display:'flex',
             gap:20
@@ -40,11 +36,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TransitionsModal({open,setOpen}) {
       const classes = useStyles();
-
-      const handleOpen = () => {
-            setOpen(true);
-      };
-
       const handleClose = () => {
             setOpen(false);
       };
@@ -70,7 +61,7 @@ export default function TransitionsModal({open,setOpen}) {
                   <Fade in={open}>
                         <div className={classes.paper}>
                               <h2>Add user</h2>
-                              <div className={classes.frmGroup}>
+                              <div>
                                     <div className={classes.frmControl}>
                                           <TextField
                                                 variant='outlined'

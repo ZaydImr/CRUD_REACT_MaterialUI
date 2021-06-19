@@ -1,8 +1,0 @@
-{
-  "runtimeOptions": {
-    "additionalProbingPaths": [
-      "C:\\Users\\pluto\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\pluto\\.nuget\\packages"
-    ]
-  }
-}
