@@ -4,8 +4,10 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
 import axios from 'axios'
+import InputField from './TextField'
+import { Formik,Form} from 'formik'
+import * as Yup from 'yup'
 
 const api = axios.create({
       baseURL:`http://localhost:5000/weatherforecast`
@@ -36,101 +38,106 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TransitionsModal({open,setOpen}) {
       const classes = useStyles();
+      const validate = Yup.object({
+            Fullname : Yup.string().min(10,'Must be at least 10 characters').required('Required') ,
+            email : Yup.string().email('Email is invalid').required('Email required') ,
+            username : Yup.string().min(6,'Must be at least 6 characters').max(30,'Must be less than 30 characters').required('Username equired') ,
+            password : Yup.string().min(8,'Must be at least 8 characters').max(30,'Must be less than 30 characters').required('Password required') ,
+            repass : Yup.string().oneOf([Yup.ref('password'),null],'Password doesn\'t match').required('Re-password required'),
+            phoneNumber : Yup.number().min(10,'Must be 10 characters').max(10,'Must be 10 characters').required('Re-password required')
+      })
+
       const handleClose = () => {
             setOpen(false);
       };
 
       const handleAdd =()=>{
-            //api.post('/',);
             api.post('/',{username:'wahya',password:'way7ak',Fullname:'wahya3',email:'way7ak4',phoneNumber:'way7ak5'}).then(setOpen(false));
       }
-
+      
       return (
-      <Modal
-                  aria-labelledby="transition-modal-title"
-                  aria-describedby="transition-modal-description"
-                  className={classes.modal}
-                  open={open}
-                  onClose={handleClose}
-                  closeAfterTransition
-                  BackdropComponent={Backdrop}
-                  BackdropProps={{
-                  timeout: 500,
-                  }}
-            >
-                  <Fade in={open}>
-                        <div className={classes.paper}>
-                              <h2>Add user</h2>
-                              <div>
-                                    <div className={classes.frmControl}>
-                                          <TextField
-                                                variant='outlined'
-                                                margin='normal'
-                                                fullWidth
-                                                required
-                                                id='txtFullname'
-                                                label='Fullname'
-                                                autoFocus
-                                                autoComplete='Username'
-                                          />
-                                          <TextField
-                                                variant='outlined'
-                                                margin='normal'
-                                                fullWidth
-                                                required
-                                                id='txtUsername'
-                                                label='Username'
-                                                autoComplete='Username'
-                                          />
+            <Modal
+                              aria-labelledby="transition-modal-title"
+                              aria-describedby="transition-modal-description"
+                              className={classes.modal}
+                              open={open}
+                              onClose={handleClose}
+                              closeAfterTransition
+                              BackdropComponent={Backdrop}
+                              BackdropProps={{
+                              timeout: 500,
+                              }}
+                        >
+                              <Fade in={open}>
+                                    <div className={classes.paper} >
+                                          <Formik
+                                                initialValues={{
+                                                      Fullname:'',
+                                                      username:'',
+                                                      Email:'',
+                                                      password:'',
+                                                      repass:'',
+                                                      phoneNumber:''
+                                                }}
+                                                validationSchema={validate}
+                                          >     
+                                          {formik=>(
+                                                <Form>
+                                                      <h2>Add user</h2>
+                                                      <div>
+                                                            <div className={classes.frmControl}>
+                                                                  <InputField
+                                                                        name='Fullname'
+                                                                        label='Fullname'
+                                                                        type='text'
+                                                                  />
+                                                                  <InputField
+                                                                        name='username'
+                                                                        label='Username'
+                                                                        type='text'
+                                                                  />
+                                                            </div>
+                                                            <InputField
+                                                                        label='Email'
+                                                                        type='email'
+                                                                        name='email'
+                                                                  />
+                                                            <div className={classes.frmControl}>
+                                                                  <InputField
+                                                                        label='Password'
+                                                                        type='password'
+                                                                        name='password'
+                                                                  />
+                                                                  <InputField
+                                                                        label='Password'
+                                                                        type='password'
+                                                                        name='repass'
+                                                                  />
+                                                            </div>
+                                                            <div className={classes.frmControl}>
+                                                                  <InputField
+                                                                        label='Phone number'
+                                                                        type='tel'
+                                                                        name='phoneNumber'
+                                                                  />
+                                                            </div>
+                                                            <div className={classes.frmControl}>
+                                                                  <Button
+                                                                        type='submit'
+                                                                        color='primary'
+                                                                        variant='contained'
+                                                                        size='large'
+                                                                        className={classes.btn}
+                                                                        onClick={handleAdd}>
+                                                                              Add
+                                                                  </Button>
+                                                            </div>
+                                                      </div>
+                                                </Form>
+                                                )}
+                                          </Formik>
                                     </div>
-                                    <TextField
-                                                variant='outlined'
-                                                margin='normal'
-                                                label='Email'
-                                                type='email'
-                                                required
-                                                fullWidth
-                                                id='txtRePass'
-                                                autoComplete='current-password'
-                                          />
-                                    <div className={classes.frmControl}>
-                                          <TextField
-                                                variant='outlined'
-                                                margin='normal'
-                                                label='Password'
-                                                type='password'
-                                                required
-                                                fullWidth
-                                                id='txtPass'
-                                                autoComplete='current-password'
-                                          />
-                                          <TextField
-                                                variant='outlined'
-                                                margin='normal'
-                                                label='Re-password'
-                                                type='password'
-                                                required
-                                                fullWidth
-                                                id='txtRePass'
-                                                autoComplete='current-password'
-                                          />
-                                    </div>
-                                    
-                                    <div className={classes.frmControl}>
-                                          <Button
-                                                type='button'
-                                                color='primary'
-                                                variant='contained'
-                                                size='large'
-                                                className={classes.btn}
-                                                onClick={handleAdd}>
-                                                      Add
-                                          </Button>
-                                    </div>
-                                    
-                              </div>
-                        </div>
-                  </Fade>
-      </Modal>
+                              </Fade>
+            </Modal>
       );
 }

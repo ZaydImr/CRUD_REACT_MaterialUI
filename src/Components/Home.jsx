@@ -48,21 +48,21 @@ const Home = () => {
             <Table className={classes.table} aria-label="simple table">
                   <TableHead>
                         <TableRow>
-                              <TableCell>User</TableCell>
-                              <TableCell align="right">Pass</TableCell>
-                              <TableCell align="right">Fullname</TableCell>
-                              <TableCell align="right">Email</TableCell>
-                              <TableCell align="right">Phone Number</TableCell>
-                              <TableCell align="right">Delete</TableCell>
+                              <TableCell component="th">Fullname</TableCell>
+                              <TableCell align="right" component="th">User</TableCell>
+                              <TableCell align="right" component="th">Pass</TableCell>
+                              <TableCell align="right" component="th">Email</TableCell>
+                              <TableCell align="right" component="th">Phone Number</TableCell>
+                              <TableCell align="right" component="th">Delete</TableCell>
                         </TableRow>
                   </TableHead>
                   <TableBody>
                               {data.map((user)=>{
                                     return(
                                           <TableRow key={user.username}>
-                                                <TableCell component="th" scope="row">{user.username}</TableCell>
+                                                <TableCell component="th" scope="row">{user.Fullname}</TableCell>
+                                                <TableCell align="right">{user.username}</TableCell>
                                                 <TableCell align="right">{user.password}</TableCell>
-                                                <TableCell align="right">{user.Fullname}</TableCell>
                                                 <TableCell align="right">{user.email}</TableCell>
                                                 <TableCell align="right">{user.phoneNumber}</TableCell>
                                                 <TableCell align="right">
