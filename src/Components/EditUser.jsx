@@ -53,7 +53,7 @@ export default function TransitionsModal({open,setOpen}) {
       };
 
       const handleAdd =(user)=>{
-            api.post('/',user).then(setOpen(false));
+            api.put('/',user).then(setOpen(false));
       }
       
       return (

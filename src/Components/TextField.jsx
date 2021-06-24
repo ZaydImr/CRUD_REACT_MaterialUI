@@ -8,7 +8,7 @@ const InputField = ({label,...props}) => {
       const [tst,setTst] = useState(false);
 
       useEffect(()=>{
-            console.log(field,meta);
+            //console.log(field,meta);
                   if(meta.touched)
                         setTst(true);
                   else if(meta.error===undefined)

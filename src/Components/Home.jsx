@@ -11,30 +11,49 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import axios from 'axios'
 import AddUser from './AddUser'
+import EditUser from './EditUser'
 import NavbarHome from './Navbars/NavbarHome'
 
 const api = axios.create({
-      baseURL:`http://localhost:5000/weatherforecast`
+      baseURL:process.env.REACT_APP_API
 })
 const useStyles = makeStyles({
       table: {
             minWidth: 650,
       },
+      actionCell:{
+            minWidth:'fit-content',
+            display:'flex',
+            gap:15,
+            flexDirection: 'unset'
+      }
 });
 
 const Home = () => {
       const [addUser,setAddUser] = useState(false);
+      const [editUser,setEditUser] = useState(false);
       const [data,setData] = useState([]);
       const classes = useStyles();
 
       useEffect(()=>{
-            api.get('/').then(res=>{
+            //api.get('/','aa')
+            axios({
+                  method:'GET',
+                  params:{token:process.env.REACT_APP_TOK},
+                  url:'http://localhost:5000/api/users'
+            }).then(res=>{
                   setData(res.data);
             })
       })
+
       const handleAdd = ()=>{
             setAddUser(true);
       }
+
+      const handleEdit = ()=>{
+            setAddUser(true);
+      }
+
       const handleDelete = (username)=>{
             api.delete('/'+username);
       }
@@ -43,6 +62,7 @@ const Home = () => {
       <>
       <NavbarHome/>
       <AddUser open={addUser} setOpen={setAddUser}/>
+      <EditUser open={editUser} setOpen={setEditUser}/>
       <Button variant='contained'  color='primary' onClick={handleAdd} style={{marginBottom:10}}>Add user</Button>
       <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="simple table">
@@ -51,9 +71,9 @@ const Home = () => {
                               <TableCell component="th">Fullname</TableCell>
                               <TableCell align="right" component="th">User</TableCell>
                               <TableCell align="right" component="th">Pass</TableCell>
-                              <TableCell align="right" component="th">Email</TableCell>
+                              <TableCell align="center" component="th">Email</TableCell>
                               <TableCell align="right" component="th">Phone Number</TableCell>
-                              <TableCell align="right" component="th">Delete</TableCell>
+                              <TableCell align="center" component="th">Action</TableCell>
                         </TableRow>
                   </TableHead>
                   <TableBody>
@@ -63,9 +83,10 @@ const Home = () => {
                                                 <TableCell component="th" scope="row">{user.Fullname}</TableCell>
                                                 <TableCell align="right">{user.username}</TableCell>
                                                 <TableCell align="right">{user.password}</TableCell>
-                                                <TableCell align="right">{user.email}</TableCell>
+                                                <TableCell align="center">{user.email}</TableCell>
                                                 <TableCell align="right">{user.phoneNumber}</TableCell>
-                                                <TableCell align="right">
+                                                <TableCell align="right" className={classes.actionCell}>
+                                                      <Button variant='contained' color='primary' onClick={()=>handleEdit(user.username)}>Edit</Button>
                                                       <Button variant='contained' color='secondary' onClick={()=>handleDelete(user.username)}>Delete</Button>
                                                 </TableCell>
                                           </TableRow>
