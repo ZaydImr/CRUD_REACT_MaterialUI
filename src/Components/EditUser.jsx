@@ -39,21 +39,28 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TransitionsModal({open,setOpen,user}) {
       const classes = useStyles();
+      const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
       const validate = Yup.object({
-            Fullname : Yup.string().min(10,'Must be at least 10 characters').required('Required') ,
+            Fullname : Yup.string().min(3,'Must be at least 3 characters').required('Required') ,
             email : Yup.string().email('Email is invalid').required('Email required') ,
-            username : Yup.string().min(6,'Must be at least 6 characters').max(30,'Must be less than 30 characters').required('Username equired') ,
-            password : Yup.string().min(8,'Must be at least 8 characters').max(30,'Must be less than 30 characters').required('Password required') ,
-            repass : Yup.string().oneOf([Yup.ref('password'),null],'Password doesn\'t match').required('Re-password required'),
-            phoneNumber : Yup.number().min(10,'Must be 10 characters').max(10,'Must be 10 characters').required('Re-password required')
+            username : Yup.string().min(6,'Must be at least 6 characters').max(30,'Must be less than 30 characters').required('Username required') ,
+            password : Yup.string().min(8,'Must be at least 8 characters').max(30,'Must be less than 30 characters'),
+            repass : Yup.string().oneOf([Yup.ref('password'),null],'Password doesn\'t match'),
+            phoneNumber : Yup.string().matches(phoneRegExp, 'Phone number is not valid').min(10,'Must be at least 10 characters')
       })
 
       const handleClose = () => {
             setOpen(false);
       };
 
-      const handleAdd =(user)=>{
-            api.put('/',user).then(setOpen(false));
+      const handleEdit =(formik)=>{
+            if(formik.values.password!=formik.values.repass){
+                  formik.values.repass = '*';
+            }
+            else if(formik.isValid&&formik.dirty)
+                  api.put('/',formik.values).then(setOpen(false));
+            else
+                  setOpen(false);
       }
       
       return (
@@ -92,12 +99,6 @@ export default function TransitionsModal({open,setOpen,user}) {
                                                                         label='Fullname'
                                                                         type='text'
                                                                   />
-                                                                  {console.log(<InputField
-                                                                        name='Fullname'
-                                                                        label='Fullname'
-                                                                        type='text'
-                                                                        disabled
-                                                                  />)}
                                                                   <InputField
                                                                         name='username'
                                                                         label='Username'
@@ -137,8 +138,8 @@ export default function TransitionsModal({open,setOpen,user}) {
                                                                         variant='contained'
                                                                         size='large'
                                                                         className={classes.btn}
-                                                                        onClick={()=>handleAdd(formik.values)}>
-                                                                              Add
+                                                                        onClick={()=>handleEdit(formik)}>
+                                                                              Edit
                                                                   </Button>
                                                             </div>
                                                       </div>

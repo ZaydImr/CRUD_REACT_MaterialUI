@@ -71,8 +71,8 @@ const Home = () => {
                   <TableHead>
                         <TableRow>
                               <TableCell component="th">Fullname</TableCell>
-                              <TableCell align="right" component="th">User</TableCell>
-                              <TableCell align="right" component="th">Pass</TableCell>
+                              <TableCell align="right" component="th">Username</TableCell>
+                              <TableCell align="right" component="th">Password</TableCell>
                               <TableCell align="center" component="th">Email</TableCell>
                               <TableCell align="right" component="th">Phone Number</TableCell>
                               <TableCell align="center" component="th">Action</TableCell>
@@ -84,7 +84,7 @@ const Home = () => {
                                           <TableRow key={user.username}>
                                                 <TableCell component="th" scope="row">{user.Fullname}</TableCell>
                                                 <TableCell align="right">{user.username}</TableCell>
-                                                <TableCell align="right">{user.password}</TableCell>
+                                                <TableCell align="right" type>******</TableCell>
                                                 <TableCell align="center">{user.email}</TableCell>
                                                 <TableCell align="right">{user.phoneNumber}</TableCell>
                                                 <TableCell align="right" className={classes.actionCell}>
