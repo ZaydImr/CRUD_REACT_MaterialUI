@@ -8,7 +8,6 @@ import axios from 'axios'
 import InputField from './TextField'
 import { Formik,Form} from 'formik'
 import * as Yup from 'yup'
-import { useEffect } from 'react';
 
 const api = axios.create({
       baseURL:process.env.REACT_APP_API
@@ -42,8 +41,8 @@ export default function TransitionsModal({open,setOpen,user}) {
       const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
       const validate = Yup.object({
             Fullname : Yup.string().min(3,'Must be at least 3 characters').required('Required') ,
-            email : Yup.string().email('Email is invalid').required('Email required') ,
-            username : Yup.string().min(6,'Must be at least 6 characters').max(30,'Must be less than 30 characters').required('Username required') ,
+            email : Yup.string().required('Email required') ,
+            username : Yup.string().required('Username required') ,
             password : Yup.string().min(8,'Must be at least 8 characters').max(30,'Must be less than 30 characters'),
             repass : Yup.string().oneOf([Yup.ref('password'),null],'Password doesn\'t match'),
             phoneNumber : Yup.string().matches(phoneRegExp, 'Phone number is not valid').min(10,'Must be at least 10 characters')
@@ -53,12 +52,12 @@ export default function TransitionsModal({open,setOpen,user}) {
             setOpen(false);
       };
 
-      const handleEdit =(formik)=>{
-            if(formik.values.password!=formik.values.repass){
-                  formik.values.repass = '*';
+      const handleEdit =(dat)=>{
+            if(dat.values.password!=dat.values.repass){
+                  dat.values.repass = '*';
             }
-            else if(formik.isValid&&formik.dirty)
-                  api.put('/',formik.values).then(setOpen(false));
+            else if(dat.isValid&&dat.dirty)
+                  api.put('/',dat.values).then(setOpen(false));
             else
                   setOpen(false);
       }

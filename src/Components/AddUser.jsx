@@ -6,7 +6,7 @@ import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button'
 import axios from 'axios'
 import InputField from './TextField'
-import { Formik,Form, isEmptyArray} from 'formik'
+import { Formik,Form} from 'formik'
 import * as Yup from 'yup'
 
 const api = axios.create({
@@ -51,9 +51,9 @@ export default function TransitionsModal({open,setOpen}) {
             setOpen(false);
       };
 
-      const handleAdd =(formik)=>{
-            if(formik.isValid&&formik.dirty)
-                  api.post('/',formik.values).then(setOpen(false));
+      const handleAdd =(dat)=>{
+            if(dat.isValid&&dat.dirty)
+                  api.post('/',dat.values).then(setOpen(false));
       }
       
       return (
