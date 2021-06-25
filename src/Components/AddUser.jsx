@@ -6,9 +6,8 @@ import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button'
 import axios from 'axios'
 import InputField from './TextField'
-import { Formik,Form} from 'formik'
+import { Formik,Form, isEmptyArray} from 'formik'
 import * as Yup from 'yup'
-import { useEffect } from 'react';
 
 const api = axios.create({
       baseURL:process.env.REACT_APP_API
@@ -40,20 +39,21 @@ const useStyles = makeStyles((theme) => ({
 export default function TransitionsModal({open,setOpen}) {
       const classes = useStyles();
       const validate = Yup.object({
-            Fullname : Yup.string().min(10,'Must be at least 10 characters').required('Required') ,
+            Fullname : Yup.string().min(3,'Must be at least 3 characters').required('Required') ,
             email : Yup.string().email('Email is invalid').required('Email required') ,
-            username : Yup.string().min(6,'Must be at least 6 characters').max(30,'Must be less than 30 characters').required('Username equired') ,
+            username : Yup.string().min(6,'Must be at least 6 characters').max(30,'Must be less than 30 characters').required('Username required') ,
             password : Yup.string().min(8,'Must be at least 8 characters').max(30,'Must be less than 30 characters').required('Password required') ,
             repass : Yup.string().oneOf([Yup.ref('password'),null],'Password doesn\'t match').required('Re-password required'),
-            phoneNumber : Yup.number().min(10,'Must be 10 characters').max(10,'Must be 10 characters').required('Re-password required')
+            phoneNumber : Yup.number('Number phone must be a number').min(10,'Must be 10 characters').required('Phone number required')
       })
 
       const handleClose = () => {
             setOpen(false);
       };
 
-      const handleAdd =(user)=>{
-            api.post('/',user).then(setOpen(false));
+      const handleAdd =(formik)=>{
+            if(formik.isValid&&formik.dirty)
+                  api.post('/',formik.values).then(setOpen(false));
       }
       
       return (
@@ -72,6 +72,7 @@ export default function TransitionsModal({open,setOpen}) {
                               <Fade in={open}>
                                     <div className={classes.paper} >
                                           <Formik
+                                                
                                                 initialValues={{
                                                       Fullname:'',
                                                       username:'',
@@ -130,7 +131,7 @@ export default function TransitionsModal({open,setOpen}) {
                                                                         variant='contained'
                                                                         size='large'
                                                                         className={classes.btn}
-                                                                        onClick={()=>handleAdd(formik.values)}>
+                                                                        onClick={()=>handleAdd(formik)}>
                                                                               Add
                                                                   </Button>
                                                             </div>

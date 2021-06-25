@@ -5,6 +5,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -31,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
   appBar:{
         backgroundColor:'white',
         color:'#222'
+  },
+  loginIcon:{
+    gap:10
   }
 }));
 
@@ -94,8 +99,8 @@ export default function MenuAppBar() {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleClose} className={classes.loginIcon}><PermIdentityIcon/>My account</MenuItem>
+                <MenuItem onClick={handleClose} className={classes.loginIcon}><ExitToAppIcon/>Logout</MenuItem>
               </Menu>
             </div>
           )}

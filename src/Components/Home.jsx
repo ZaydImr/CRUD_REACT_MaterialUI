@@ -32,6 +32,7 @@ const useStyles = makeStyles({
 const Home = () => {
       const [addUser,setAddUser] = useState(false);
       const [editUser,setEditUser] = useState(false);
+      const [userForEdit,setUser] = useState({});
       const [data,setData] = useState([]);
       const classes = useStyles();
 
@@ -40,7 +41,7 @@ const Home = () => {
             axios({
                   method:'GET',
                   params:{token:process.env.REACT_APP_TOK},
-                  url:'http://localhost:5000/api/users'
+                  url:process.env.REACT_APP_API
             }).then(res=>{
                   setData(res.data);
             })
@@ -50,8 +51,9 @@ const Home = () => {
             setAddUser(true);
       }
 
-      const handleEdit = ()=>{
-            setAddUser(true);
+      const handleEdit = (user)=>{
+            setUser(user);
+            setEditUser(true);
       }
 
       const handleDelete = (username)=>{
@@ -62,7 +64,7 @@ const Home = () => {
       <>
       <NavbarHome/>
       <AddUser open={addUser} setOpen={setAddUser}/>
-      <EditUser open={editUser} setOpen={setEditUser}/>
+      <EditUser open={editUser} setOpen={setEditUser} user={userForEdit}/>
       <Button variant='contained'  color='primary' onClick={handleAdd} style={{marginBottom:10}}>Add user</Button>
       <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="simple table">
@@ -86,7 +88,7 @@ const Home = () => {
                                                 <TableCell align="center">{user.email}</TableCell>
                                                 <TableCell align="right">{user.phoneNumber}</TableCell>
                                                 <TableCell align="right" className={classes.actionCell}>
-                                                      <Button variant='contained' color='primary' onClick={()=>handleEdit(user.username)}>Edit</Button>
+                                                      <Button variant='contained' color='primary' onClick={()=>handleEdit(user)}>Edit</Button>
                                                       <Button variant='contained' color='secondary' onClick={()=>handleDelete(user.username)}>Delete</Button>
                                                 </TableCell>
                                           </TableRow>

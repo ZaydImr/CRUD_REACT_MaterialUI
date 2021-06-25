@@ -3,21 +3,26 @@ import {ErrorMessage,useField} from 'formik'
 import TextField from '@material-ui/core/TextField'
 import { useEffect } from 'react';
 
-const InputField = ({label,...props}) => {
+const InputField = ({label,disabled,...props}) => {
       const [field,meta] = useField(props);
       const [tst,setTst] = useState(false);
+      const [dis,setDis] = useState(false); 
+      const [focus,setFocus] = useState(false); 
 
       useEffect(()=>{
-            //console.log(field,meta);
-                  if(meta.touched)
-                        setTst(true);
-                  else if(meta.error===undefined)
+            if(meta.error===undefined)
                         setTst(false);
+            else if(meta.touched)
+                        setTst(true);
+            if(disabled)
+                  setDis(true);
       })
       
       return (
             <>
             <TextField
+                  autoFocus={focus}
+                  disabled={dis}
                   variant='outlined'
                   margin='normal'
                   label={label}

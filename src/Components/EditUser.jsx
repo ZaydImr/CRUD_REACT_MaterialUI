@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
       }
 }));
 
-export default function TransitionsModal({open,setOpen}) {
+export default function TransitionsModal({open,setOpen,user}) {
       const classes = useStyles();
       const validate = Yup.object({
             Fullname : Yup.string().min(10,'Must be at least 10 characters').required('Required') ,
@@ -73,19 +73,18 @@ export default function TransitionsModal({open,setOpen}) {
                                     <div className={classes.paper} >
                                           <Formik
                                                 initialValues={{
-                                                      Fullname:'',
-                                                      username:'',
-                                                      email:'',
+                                                      Fullname:user.Fullname,
+                                                      username:user.username,
+                                                      email:user.email,
                                                       password:'',
                                                       repass:'',
-                                                      phoneNumber:''
+                                                      phoneNumber:user.phoneNumber
                                                 }}
                                                 validationSchema={validate}
-                                          >     
+                                          > 
                                           {formik=>(
-                                                
                                                 <Form>
-                                                      <h2>Add user</h2>
+                                                      <h2>Edit user</h2>
                                                       <div>
                                                             <div className={classes.frmControl}>
                                                                   <InputField
@@ -93,16 +92,24 @@ export default function TransitionsModal({open,setOpen}) {
                                                                         label='Fullname'
                                                                         type='text'
                                                                   />
+                                                                  {console.log(<InputField
+                                                                        name='Fullname'
+                                                                        label='Fullname'
+                                                                        type='text'
+                                                                        disabled
+                                                                  />)}
                                                                   <InputField
                                                                         name='username'
                                                                         label='Username'
                                                                         type='text'
+                                                                        disabled={true}
                                                                   />
                                                             </div>
                                                             <InputField
                                                                         label='Email'
                                                                         type='email'
                                                                         name='email'
+                                                                        disabled={true}
                                                                   />
                                                             <div className={classes.frmControl}>
                                                                   <InputField
