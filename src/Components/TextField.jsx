@@ -7,7 +7,6 @@ const InputField = ({label,disabled,...props}) => {
       const [field,meta] = useField(props);
       const [tst,setTst] = useState(false);
       const [dis,setDis] = useState(false); 
-      const [focus,setFocus] = useState(false); 
 
       useEffect(()=>{
             if(meta.error===undefined)
@@ -21,7 +20,6 @@ const InputField = ({label,disabled,...props}) => {
       return (
             <>
             <TextField
-                  autoFocus={focus}
                   disabled={dis}
                   variant='outlined'
                   margin='normal'

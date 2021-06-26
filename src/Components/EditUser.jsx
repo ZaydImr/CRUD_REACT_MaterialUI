@@ -52,12 +52,12 @@ export default function TransitionsModal({open,setOpen,user}) {
             setOpen(false);
       };
 
-      const handleEdit =(dat)=>{
-            if(dat.values.password!=dat.values.repass){
-                  dat.values.repass = '*';
+      const handleEdit =(form)=>{
+            if(form.values.password!==form.values.repass){
+                  form.values.repass = '*';
             }
-            else if(dat.isValid&&dat.dirty)
-                  api.put('/',dat.values).then(setOpen(false));
+            else if(form.isValid&&form.dirty)
+                  api.put('/',form.values).then(setOpen(false));
             else
                   setOpen(false);
       }

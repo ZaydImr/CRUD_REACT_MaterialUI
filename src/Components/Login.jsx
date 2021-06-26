@@ -6,17 +6,18 @@ import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import Checkbox from '@material-ui/core/Checkbox'
 import Button from '@material-ui/core/Button'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { useEffect } from 'react'
 import axios from 'axios'
-import ReactSession from 'react-client-session'
+import {ReactSession} from 'react-client-session'
 
 const Login = () => {
       const [username,setUsername]=useState('');
       const [password,setPassword]=useState('');
       const [check,setCheck] = useState(false);
       const [tst,setTst] = useState(false);
+      const history = useHistory();
 
       const handleSubmit=()=>{
             axios({
@@ -29,15 +30,38 @@ const Login = () => {
                         if(check){
                               ReactSession.setStoreType('Cookie');
                               ReactSession.set('username',username);
+                        history.push('/');
                         }
                         else{
-
+                              ReactSession.setStoreType('sessionStorage');
+                              ReactSession.set('username',username);
+                        history.push('/');
                         }
                   }
-                  else
+                  else{
+                        setPassword('');
                         setTst(true);
+                  }
+                        
             })
       }
+
+      useEffect(()=>{
+            
+            try{
+                  ReactSession.setStoreType('Cookie');
+                  if(ReactSession.get('username')!==null){
+                        console.log('tst');
+                  }
+            }catch(Err){}
+
+            ReactSession.setStoreType("sessionStorage");
+            if(ReactSession.get("username")!==null){
+                  console.log('tst2');
+            }
+            
+      },[])
+
       useEffect(()=>{
             setTst(false);
       },[username,password])

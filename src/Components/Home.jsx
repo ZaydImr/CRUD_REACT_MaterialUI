@@ -13,6 +13,8 @@ import axios from 'axios'
 import AddUser from './AddUser'
 import EditUser from './EditUser'
 import NavbarHome from './Navbars/NavbarHome'
+import { ReactSession } from 'react-client-session';
+import { useHistory } from 'react-router-dom';
 
 const api = axios.create({
       baseURL:process.env.REACT_APP_API
@@ -34,10 +36,29 @@ const Home = () => {
       const [editUser,setEditUser] = useState(false);
       const [userForEdit,setUser] = useState({});
       const [data,setData] = useState([]);
+      const history = useHistory();
       const classes = useStyles();
 
       useEffect(()=>{
-            //api.get('/','aa')
+            try{
+                  ReactSession.setStoreType('Cookie');
+                  if(ReactSession.get('username')===null){
+                        history.push('/login');
+                        console.log('tst');
+                  }
+                  else{
+                        return;
+                  }
+            }catch(Err){}
+
+            ReactSession.setStoreType('sessionStorage');
+            if(ReactSession.get('username')===null){
+                  history.push('/login');
+                  return;
+            }
+      })
+
+      useEffect(()=>{
             axios({
                   method:'GET',
                   params:{token:process.env.REACT_APP_TOK},
@@ -84,7 +105,7 @@ const Home = () => {
                                           <TableRow key={user.username}>
                                                 <TableCell component="th" scope="row">{user.Fullname}</TableCell>
                                                 <TableCell align="right">{user.username}</TableCell>
-                                                <TableCell align="right" type>******</TableCell>
+                                                <TableCell align="right">******</TableCell>
                                                 <TableCell align="center">{user.email}</TableCell>
                                                 <TableCell align="right">{user.phoneNumber}</TableCell>
                                                 <TableCell align="right" className={classes.actionCell}>

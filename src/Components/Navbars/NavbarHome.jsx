@@ -12,7 +12,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { Link } from 'react-router-dom';
+import { Link,useHistory } from 'react-router-dom';
+import { ReactSession } from 'react-client-session';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,6 +45,7 @@ export default function MenuAppBar() {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const history =  useHistory();
 
   const handleChange = (event) => {
     setAuth(event.target.checked);
@@ -56,6 +58,19 @@ export default function MenuAppBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout =()=>{
+    ReactSession.setStoreType('Cookie');
+    if(ReactSession.get('username')!=null){
+      ReactSession.Cookie.removeItem('username');
+      history.push('/login');
+    }
+    else{
+      ReactSession.setStoreType('sessionStorage');
+      ReactSession.sessionStorage.removeItem('username');
+      history.push('/login');
+    }
+  }
 
   return (
     <div className={classes.root}>
@@ -100,7 +115,7 @@ export default function MenuAppBar() {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose} className={classes.loginIcon}><PermIdentityIcon/>My account</MenuItem>
-                <MenuItem onClick={handleClose} className={classes.loginIcon}><ExitToAppIcon/>Logout</MenuItem>
+                <MenuItem onClick={handleLogout} className={classes.loginIcon}><ExitToAppIcon/>Logout</MenuItem>
               </Menu>
             </div>
           )}
